@@ -28,11 +28,14 @@ namespace SunCollision
         private List<Vector3> laser_new_location;
         private float ls_distance;
 
+        private bool ready;
 
         void Start()
         {
+            ready = false;
             audioData.Play(0);
             prepareElements();
+            //StartCoroutine("prepareElements");
             StartCoroutine("shoot_fireball");
             StartCoroutine("shoot_laser");
         }
@@ -40,24 +43,28 @@ namespace SunCollision
         void Update()
         {
             int num_of_sun = getAlivedSun().Count;
-
             if (num_of_sun > 3)  // Still in stage 2
             {
                 if (!stage2_fb_ready || !stage2_ls_ready)
                     getToStage2Position();
                 if (laser_not_ready)
                     lsToReadyPosition();
+                if(stage2_fb_ready && stage2_ls_ready && !ready)
+                {   
+                    StartCoroutine("removeInvinsibility");
+                    ready = true;
+                }
                 turn_chandelier();
             }
             else // preceeding to next stage
             {
-                if (num_of_sun > 0) // clean up suns
+                if (num_of_sun > 0 && stage2_fb_ready && stage2_ls_ready) // clean up suns
                 {
                     StopCoroutine("shoot_fireball");
                     StopCoroutine("shoot_laser");
                     endStage();
                 }
-                else
+                else if(num_of_sun == 0)
                 { // all suns have been cleaned, shut down stage 2
                     gameObject.SetActive(false);
                 }
@@ -76,9 +83,10 @@ namespace SunCollision
         }
 
         // Prepare the elements in the stage 1
-        void prepareElements()
+        private void prepareElements()
         {
             // Setting other variables
+            Debug.Log("Stage_2");
             chandelier = GameObject.Find("stage_2_chandelier");
             fireball_suns = new List<GameObject>();
             laser_suns = new List<GameObject>();
@@ -88,9 +96,11 @@ namespace SunCollision
             ls_distance = circling_radius + 10;
             // prepare suns, fill in fb_suns and ls_suns
             List<GameObject> remaining_suns = getAlivedSun();
+            
+            
             foreach (GameObject sun in remaining_suns)
             {
-                StartCoroutine("removeInivinsbility",sun.GetComponent<SunColliderHandler>());
+                
                 if (fireball_suns.Count < 4)
                     fireball_suns.Add(sun);
                 else
@@ -110,10 +120,11 @@ namespace SunCollision
             ls_suns_locations.Add(new Vector3(0, height_of_suns - 20, ls_distance));
 
         }
-        private IEnumerator removeInivinsbility(SunColliderHandler script)
+        private IEnumerator removeInvinsibility()
         {
-            yield return new WaitForSeconds(2f);
-            script.invinsible = false;
+            yield return new WaitForSeconds(0.1f);
+            foreach(GameObject sun in getAlivedSun())
+                sun.GetComponent<SunColliderHandler>().invinsible = false;
 
         }
         // Get to ready position before stage 2 starts
@@ -251,8 +262,9 @@ namespace SunCollision
             GameObject[] all_obj = UnityEngine.Object.FindObjectsOfType<GameObject>();
             List<GameObject> alive_suns = new List<GameObject>();
             foreach (GameObject obj in all_obj)
-                if ((obj.name.Contains("sun2_")) && obj.activeInHierarchy)
-                    alive_suns.Add(obj);
+                if(obj!=null)
+                    if ((obj.name.Contains("sun2_")) && obj.activeInHierarchy)
+                        alive_suns.Add(obj);
             return alive_suns;
         }
 
@@ -326,6 +338,7 @@ namespace SunCollision
             List<GameObject> rest_of_suns = getAlivedSun();
             foreach (GameObject sun in rest_of_suns)
             {
+                sun.GetComponent<SunColliderHandler>().invinsible = true;
                 // get close to center
                 if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 12)
                     sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), Time.deltaTime * 5);

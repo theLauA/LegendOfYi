@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunCollision
-{
-    public class stage_1 : MonoBehaviour
+{   
+    public class StageManager : MonoBehaviour
     {
-
         public GameObject fireball_homing;
         public GameObject sun;
-        public GameObject stage_2;
+        //public GameObject stage_2;
         public GameObject target;
         public float turnAngle;
         public int num_of_suns;
@@ -22,7 +21,8 @@ namespace SunCollision
         private float turn_harder;
         private float shoot_faster;
         public AudioSource audioData;
-        private bool ended = false;
+
+        // Use this for initialization
         void Start()
         {
             audioData.Play(0);
@@ -30,7 +30,7 @@ namespace SunCollision
             StartCoroutine("shoot_fireball");
         }
 
-
+        // Update is called once per frame
         void Update()
         {
             turn();
@@ -62,7 +62,6 @@ namespace SunCollision
             time += Time.deltaTime;
         }
 
-        // prepare the elements in the stage 1
         void prepareElements()
         {
             createSuns();
@@ -108,7 +107,7 @@ namespace SunCollision
                 GameObject sun_as_shooter = alive_suns[chosen_sun];
                 // Prepare to shoot
                 sun_as_shooter.transform.LookAt(target.transform.position); // make sun face the target
-                GameObject new_fireball = Instantiate(fireball_homing, sun_as_shooter.transform.position + sun_as_shooter.transform.forward * Time.deltaTime * 500, sun_as_shooter.transform.rotation);
+                GameObject new_fireball = Instantiate(fireball_homing, sun_as_shooter.transform.position + sun_as_shooter.transform.forward * Time.deltaTime * 500, Quaternion.identity); //sun_as_shooter.transform.rotation);
 
                 new_fireball.name = "fireball_clone_";
                 new_fireball.transform.parent = GameObject.Find("collection_fb").transform;
@@ -146,7 +145,7 @@ namespace SunCollision
         {
             audioData.volume -= 0.05f * audioData.volume;
             List<GameObject> rest_of_suns = getAlivedSun();
-            
+
             foreach (GameObject sun in rest_of_suns)
             {
                 // get close to center
@@ -155,19 +154,11 @@ namespace SunCollision
 
                 if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 20)
                     sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), Time.deltaTime * 10);
-                else // closer enough, transfer sun to stage 2 with name changed
-                {
-                    char[] charSeparators = new char[] { '_' };
-                    sun.transform.parent = stage_2.transform;
-                    string new_sun_name = "sun2_" + sun.name.Split(charSeparators, System.StringSplitOptions.RemoveEmptyEntries)[1];
-                    sun.name = new_sun_name;
-                    stage_2.SetActive(true);
-                }
                 
             }
-            
 
         }
     }
 }
+
 

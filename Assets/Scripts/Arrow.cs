@@ -33,9 +33,15 @@ public class Arrow : MonoBehaviour {
 
             Stick(collision);
         }
-        else if(collision.collider.tag != "Fire")
+        else if(collision.collider.tag == "Fire" || collision.collider.tag == "Player")
         {
-            mybody.constraints = RigidbodyConstraints.FreezeAll;
+            // mybody.constraints = RigidbodyConstraints.FreezeAll;
+            
+            Destroy(gameObject);
+        }
+        else
+        {
+            Stick(collision);
         }
     }
 
@@ -46,6 +52,7 @@ public class Arrow : MonoBehaviour {
         //fc.anchor = collision.contacts[0].point;
         //fc.connectedBody = collision.rigidbody; 
         mybody.constraints = RigidbodyConstraints.FreezeAll;
+        //Destroy(transform.GetComponent<Rigidbody>());
         //StartCoroutine("fade");
     }
 
