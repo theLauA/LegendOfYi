@@ -61,7 +61,7 @@ public class stage_3 : MonoBehaviour
                         new_location = location_umbrella;
                     else if (actions_prob[2] <= action && action < 10)
                         new_location = location_spiral;
-                    Debug.Log("Changed to: " + new_location.ToString());
+                    //Debug.Log("Changed to: " + new_location.ToString());
                     last_loc_change_time = time;
 
                 }
