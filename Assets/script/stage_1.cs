@@ -152,9 +152,8 @@ namespace SunCollision
                 // get close to center
                 SunColliderHandler script = sun.GetComponent<SunColliderHandler>();
                 script.invinsible = true;
-
-                if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 20)
-                    sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), Time.deltaTime * 10);
+                if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 40)
+                    sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), 2f);
                 else // closer enough, transfer sun to stage 2 with name changed
                 {
                     char[] charSeparators = new char[] { '_' };

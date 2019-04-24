@@ -66,7 +66,8 @@ namespace SunCollision
                 }
                 else if(num_of_sun == 0)
                 { // all suns have been cleaned, shut down stage 2
-                    gameObject.SetActive(false);
+                    //gameObject.SetActive(false);
+                    Destroy(gameObject);
                 }
             }
             cleanUpLaser();
@@ -340,8 +341,8 @@ namespace SunCollision
             {
                 sun.GetComponent<SunColliderHandler>().invinsible = true;
                 // get close to center
-                if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 12)
-                    sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), Time.deltaTime * 5);
+                if (Vector3.Distance(sun.transform.position, new Vector3(0, height_of_suns, 0)) >= 25)
+                    sun.transform.position = Vector3.MoveTowards(sun.transform.position, new Vector3(0, height_of_suns, 0), 2f);
                 else // closer enough, transfer sun to stage 2 with name changed
                     sun.SetActive(false);
             }

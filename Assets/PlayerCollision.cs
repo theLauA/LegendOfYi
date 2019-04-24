@@ -42,9 +42,11 @@ public class PlayerCollision : MonoBehaviour {
     {
         if (collision.collider.tag == "Fire")
         {
+            Debug.Log(collision.collider.name);
             shakeDuration = 2f;
             currentHleath -= 10f;
             healthBar.UpdateBar(currentHleath, health);
         }
+        
     }
 }
