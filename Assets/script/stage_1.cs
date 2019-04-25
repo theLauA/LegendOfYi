@@ -107,9 +107,12 @@ namespace SunCollision
                 int chosen_sun = (int)Random.Range(0, alive_suns.Count);
                 GameObject sun_as_shooter = alive_suns[chosen_sun];
                 // Prepare to shoot
-                sun_as_shooter.transform.LookAt(target.transform.position); // make sun face the target
-                GameObject new_fireball = Instantiate(fireball_homing, sun_as_shooter.transform.position + sun_as_shooter.transform.forward * Time.deltaTime * 500, sun_as_shooter.transform.rotation);
-
+                //sun_as_shooter.transform.LookAt(target.transform.position); // make sun face the target
+                
+                Quaternion toward_target = Quaternion.LookRotation(target.transform.position - sun_as_shooter.transform.position);
+                GameObject new_fireball = GameObject.Instantiate(fireball_homing, sun_as_shooter.transform.position,toward_target);
+                //GameObject new_fireball = Instantiate(fireball_homing);
+                //new_fireball.transform.LookAt(target.transform.position);
                 new_fireball.name = "fireball_clone_";
                 new_fireball.transform.parent = GameObject.Find("collection_fb").transform;
             }

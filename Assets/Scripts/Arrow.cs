@@ -26,7 +26,6 @@ public class Arrow : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.collider.tag);
         if (collision.collider.tag == "Animal")
         {
             hitSomething = true;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class fireball_homing : MonoBehaviour {
 
-    public Rigidbody homingFireball;
+    private Rigidbody homingFireball;
     public float missileVelocity = 100f;
     public float turn = 0f; //20f
     private Transform target;
@@ -19,6 +19,7 @@ public class fireball_homing : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        /*
         time += Time.deltaTime;
         if (gameObject.transform.position[1] <= gameObject.transform.localScale[1] / 2.0f + 0.5)
         {
@@ -26,6 +27,8 @@ public class fireball_homing : MonoBehaviour {
         }else if(time>5){
             Destroy(gameObject);
         }
+        */
+        Fire();
     }
     
     // Update the location
@@ -35,8 +38,8 @@ public class fireball_homing : MonoBehaviour {
         if (target == null || homingFireball == null)
             return;
         
-        homingFireball.velocity = transform.forward * missileVelocity;
-
+        homingFireball.velocity = Vector3.Normalize(target.transform.position - transform.position) * missileVelocity;
+        //Debug.Log(homingFireball.velocity);
         Quaternion targetRotation = Quaternion.LookRotation(target.position - transform.position);
 
         homingFireball.MoveRotation(Quaternion.RotateTowards(transform.rotation, targetRotation, turn));
@@ -48,7 +51,8 @@ public class fireball_homing : MonoBehaviour {
     {
 
         float distance = Mathf.Infinity;
-        GameObject[] all_obj = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        //GameObject[] all_obj = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        /*
         foreach (GameObject obj in all_obj)
         {
             if ((obj.name.Contains("target")) && obj.activeInHierarchy)
@@ -61,7 +65,23 @@ public class fireball_homing : MonoBehaviour {
                     target = obj.transform;
                 }
             }
+        }*/
+        GameObject hero = GameObject.Find("target");
+        if(hero != null)
+        {
+            Debug.Log("Hero");
+            if (hero.activeSelf)
+            {
+                float diff = (hero.transform.position - transform.position).sqrMagnitude;
+
+                if (diff < distance)
+                {
+                    distance = diff;
+                    target = hero.transform;
+                }
+            }
         }
+        
 
     }
 

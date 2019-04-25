@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour {
 
-    public SimpleHealthBar healthBar;
+    private SimpleHealthBar healthBar;
     public Camera mainCam;
 
     private float health;
@@ -14,6 +14,7 @@ public class PlayerCollision : MonoBehaviour {
     private float shakeAmount;
     private Vector3 originalCamPosition;
     void Start () {
+        healthBar = GameObject.Find("HP").GetComponent<SimpleHealthBar>();
         health = 100f;
         currentHleath = 100f;
         shakeDuration = 0f;
@@ -44,7 +45,7 @@ public class PlayerCollision : MonoBehaviour {
         {
             Debug.Log(collision.collider.name);
             shakeDuration = 2f;
-            currentHleath -= 10f;
+            currentHleath -= 50f;
             healthBar.UpdateBar(currentHleath, health);
         }
         
