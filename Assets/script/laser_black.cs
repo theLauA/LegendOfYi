@@ -18,7 +18,7 @@ public class laser_black : MonoBehaviour {
         
         if (lr.transform.rotation.eulerAngles.x > 85 && lr.transform.rotation.eulerAngles.x < 300)
         {
-            Debug.Log(lr.transform.rotation.eulerAngles.ToString());
+            //Debug.Log(lr.transform.rotation.eulerAngles.ToString());
             Destroy(gameObject);
         }
         

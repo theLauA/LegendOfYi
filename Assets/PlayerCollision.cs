@@ -22,7 +22,8 @@ public class PlayerCollision : MonoBehaviour {
         decreaseFactor = 1.0f;
 
         originalCamPosition = mainCam.transform.localPosition;
-	}
+        healthBar.UpdateBar(currentHleath, health);
+    }
 	
 	// Update is called once per frame
 	void Update () {

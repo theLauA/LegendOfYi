@@ -153,8 +153,11 @@ namespace SunCollision
                     size_of_sun = main_sun.transform.localScale[0];
                     if (size_of_sun == main_sun_size && numFireballHoming() < 3 && inReadyPosition() && new_location != location_umbrella && new_location != location_spiral)
                     {
-                        main_sun.transform.LookAt(target.transform.position); // make sun face the target
-                        GameObject new_fireball = Instantiate(fireball_homing, main_sun.transform.position + main_sun.transform.forward * Time.deltaTime * 500, main_sun.transform.rotation);
+                        //main_sun.transform.LookAt(target.transform.position); // make sun face the target
+                        //GameObject new_fireball = Instantiate(fireball_homing, main_sun.transform.position + main_sun.transform.forward * Time.deltaTime * 500, main_sun.transform.rotation);
+                        Quaternion toward_target = Quaternion.LookRotation(target.transform.position - main_sun.transform.position);
+                        GameObject new_fireball = GameObject.Instantiate(fireball_homing, main_sun.transform.position, toward_target);
+
                         new_fireball.name = "fireball_homing_clone_";
                         new_fireball.transform.parent = GameObject.Find("collection_fb").transform;
                     }
@@ -186,7 +189,7 @@ namespace SunCollision
                         main_sun.transform.LookAt(dir); // make sun face the target
                         Vector3 rot = main_sun.transform.rotation.eulerAngles;
                         rot = new Vector3(rot.x, rot.y, rot.z);
-                        GameObject new_fireball_float = Instantiate(fireball_float, main_sun.transform.position + main_sun.transform.forward * Time.deltaTime * 500, Quaternion.Euler(rot));
+                        GameObject new_fireball_float = Instantiate(fireball_homing, main_sun.transform.position + main_sun.transform.forward * Time.deltaTime * 500, Quaternion.Euler(rot));
                         new_fireball_float.name = "fireball_float_clone";
                         new_fireball_float.transform.parent = chandelier.transform;
                     }

@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour {
 
             }
         }
-        else if (Enemy == null)
+        else if (Enemy == null && !deathMenu.activeSelf)
         {
             StartCoroutine("endGame");
 
@@ -89,23 +89,24 @@ public class GameManager : MonoBehaviour {
             }
         }else if (deathMenu.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && Hero == null && Enemy == null)
             {
+                //Debug.Log(deathMenu.activeSelf);
                 deathMenu.SetActive(false);
-                Debug.Log(deathMenu.activeSelf);
                 StartCoroutine("startGame");
             }
         }
         
 	}
     private IEnumerator startGame()
-    {
+    {   
         Hero = GameObject.Instantiate(Character);
         Hero.transform.position = new Vector3(-84.4f, 10f, 0f);
         Hero.name = "target";
         Hero.SetActive(true);
         generalCamera.SetActive(false);
-        foreach(GameObject arrow in GameObject.FindGameObjectsWithTag("Arrow"))
+        Time.timeScale = 1;
+        foreach (GameObject arrow in GameObject.FindGameObjectsWithTag("Arrow"))
         {
             Destroy(arrow);
         }
@@ -144,12 +145,15 @@ public class GameManager : MonoBehaviour {
     }
 
     private IEnumerator stopGame()
-    {   
+    {
+        GameObject reset = GameObject.Find("DeathMenu/reset");
         Destroy(Hero);
         generalCamera.SetActive(true);
-        Destroy(Enemy, 3f);
-
-        yield return new WaitForSeconds(3.2f);
+        Destroy(Enemy, 2f);
+        reset.SetActive(false);
+        yield return new WaitForSeconds(2.1f);
+        
+        reset.SetActive(true);
         Time.timeScale = 0;
     }
 
